@@ -1,0 +1,51 @@
+﻿@model EditViewModel
+
+@{
+    ViewBag.Title = "Изменение профиля";
+    Layout = "_Layout";
+}
+
+<h2>@ViewBag.Title</h2>
+<form asp-controller="Account" asp-action="Edit" method="post" EncType="multipart/form-data">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="UserName"></label><br />
+        <input asp-for="UserName" value="@Model.UserName" />
+        <span asp-validation-for="UserName"></span>
+    </div>
+    <div>
+        <label asp-for="Email"></label><br />
+        <input asp-for="Email" value="@Model.Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div>
+        <label asp-for="DateBirth"></label><br />
+        <input asp-for="DateBirth" value="@Model.DateBirth" />
+        <span asp-validation-for="DateBirth"></span>
+    </div>
+    <div>
+        <label for="uploadImage">Аватар</label><br />
+        <input type="file" name="uploadImage" id="uploadImage" value="@Model.Avatar">
+    </div>
+    <h2>Изменить пароль</h2>
+    <div>
+        <label asp-for="Password"></label><br />
+        <input asp-for="Password" value="@Model.Password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div>
+        <label asp-for="PasswordConfirm"></label><br />
+        <input asp-for="PasswordConfirm" value="@Model.PasswordConfirm" />
+        <span asp-validation-for="PasswordConfirm"></span>
+    </div>
+    <div>
+        <input asp-for="Id" value="@Model.Id" hidden>
+    </div>
+    <div>
+        <input type="submit" value="Редактировать" />
+    </div>
+</form>
+
+@section scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

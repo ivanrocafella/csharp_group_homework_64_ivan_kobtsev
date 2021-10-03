@@ -5,6 +5,10 @@
     Layout = "_Layout";
 }
 
+<head>
+    <link rel="stylesheet" href="~/css/register.css" />
+</head>
+
 <h2>@ViewBag.Title</h2>
 <form asp-controller="Account" asp-action="Register" method="post" EncType="multipart/form-data">
     <div asp-validation-summary="ModelOnly"></div>
@@ -27,21 +31,51 @@
         <label for="uploadImage">Аватар</label><br />
         <input type="file" name="uploadImage" id="uploadImage">
     </div>
-    <div>
-        <label asp-for="Password"></label><br />
-        <input asp-for="Password" />
+    <label asp-for="Password"></label><br />
+    <div class="password">
+        <input asp-for="Password" id="password-input-1" />
         <span asp-validation-for="Password"></span>
+        <a href="#" class="password-control" id="password-control-1"></a>
     </div>
-    <div>
-        <label asp-for="PasswordConfirm"></label><br />
-        <input asp-for="PasswordConfirm" />
+    <label asp-for="PasswordConfirm"></label><br />
+    <div class="password">
+        <input asp-for="PasswordConfirm" id="password-input-2" />
         <span asp-validation-for="PasswordConfirm"></span>
+        <a href="#" class="password-control" id="password-control-2"></a>
     </div>
     <div>
         <input type="submit" value="Регистрация" />
     </div>
 </form>
 
+
 @section scripts{
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    
+    <script>
+        $('body').on('click', '#password-control-1', function(){
+	if ($('#password-input-1').attr('type') == 'password'){
+		$(this).addClass('view');
+		$('#password-input-1').attr('type', 'text');
+	} else {
+		$(this).removeClass('view');
+		$('#password-input-1').attr('type', 'password');
+	}
+	return false;
+        });
+
+        $('body').on('click', '#password-control-2', function () {
+            if ($('#password-input-2').attr('type') == 'password') {
+                $(this).addClass('view');
+                $('#password-input-2').attr('type', 'text');
+            } else {
+                $(this).removeClass('view');
+                $('#password-input-2').attr('type', 'password');
+            }
+            return false;
+        });
+
+
+
+    </script>
 }

@@ -12,6 +12,6 @@
         <h5 class="card-title">Имя пользователя: @Model.UserName</h5>
         <p class="card-text">Дата рождения: @Model.BirthDate.ToString("d")</p>
         <p class="card-text">Email: @Model.Email</p>
-        <a href="#" class="btn btn-primary">Переход куда-нибудь</a>
+        <a role="button" class="btn btn-secondary" asp-action="Edit" asp-controller="Account" asp-route-id="@Model.Id">Редактировать</a>
     </div>
 </div>

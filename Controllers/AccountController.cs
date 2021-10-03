@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -131,6 +132,68 @@ namespace csharp_group_homework_64_ivan_kobtsev.Controllers
             }
             else
                 return NotFound();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id != null)
+            {
+                Account account = await _context.Accounts.FirstOrDefaultAsync(b => b.Id == id);
+                EditViewModel editViewModel = new EditViewModel
+                {
+                    Id = account.Id,
+                    UserName = account.UserName,
+                    Email = account.Email,
+                    DateBirth = account.BirthDate,
+                    Password = Convert.ToString(account.PasswordHash),
+                    PasswordConfirm = account.PasswordHash,
+                    Avatar = account.Avatar
+                };
+                if (editViewModel != null)
+                {
+                    return View(editViewModel);
+                }
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditViewModel editViewModel, IFormFile uploadImage)
+        {
+            if (ModelState.IsValid)
+            {
+                Account account = await _context.Accounts.FirstOrDefaultAsync(e => e.Id == editViewModel.Id);
+
+                if (editViewModel != null)
+                {
+                    string pathImage;
+                    if (uploadImage != null)
+                    {
+                        pathImage = "/files/" + uploadImage.FileName;
+                        using (var fileStream = new FileStream(_appEnvironment.WebRootPath + pathImage, FileMode.Create))
+                        {
+                            await uploadImage.CopyToAsync(fileStream);
+                        }
+                    }
+                    else
+                        pathImage = editViewModel.Avatar;
+
+                    account.UserName = editViewModel.UserName;
+                    account.Email = editViewModel.Email;
+                    account.BirthDate = editViewModel.DateBirth;
+                    account.PasswordHash = editViewModel.Password;
+                    account.Avatar = pathImage;
+
+                    _context.Accounts.Update(account);
+                    _context.SaveChanges();
+                }
+                return RedirectToAction("PrivateCabinet", new { name = account.UserName });
+            }
+            else
+            {
+                return RedirectToAction("Edit");
+            }
         }
     }
 }
