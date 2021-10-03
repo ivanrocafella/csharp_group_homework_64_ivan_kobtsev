@@ -1,0 +1,17 @@
+﻿@model Account
+
+@{
+    ViewBag.Title = "Личный кабинет";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<div class="card" style="width: 18rem;">
+    <img class="card-img-top" src="@Model.Avatar" alt="Card image cap">
+    <div class="card-body">
+        <h5 class="card-title">Имя пользователя: @Model.UserName</h5>
+        <p class="card-text">Дата рождения: @Model.BirthDate.ToString("d")</p>
+        <p class="card-text">Email: @Model.Email</p>
+        <a href="#" class="btn btn-primary">Переход куда-нибудь</a>
+    </div>
+</div>
