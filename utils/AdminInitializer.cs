@@ -14,7 +14,7 @@ namespace csharp_group_homework_64_ivan_kobtsev.utils
           UserManager<Account> _userManager)
         {
             string adminEmail = "admin@admin.com";
-            string adminPassword = "password";
+            string adminPassword = "Password123";
 
             var roles = new[] { "admin", "user" };
             foreach (var role in roles)

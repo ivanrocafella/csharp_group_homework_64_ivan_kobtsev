@@ -1,0 +1,34 @@
+﻿@model List<Account>
+
+@{ ViewBag.Title = "Пользователи";
+    Layout = "_Layout"; }
+
+<h2>@ViewBag.Title</h2>
+<div class="table_section">
+
+    <table style="width: 100%;">
+        <tr>
+            <th>Аватар</th>
+            <th>Логин</th>
+            <th>Email</th>
+            <th>Дата рождения</th>
+            <th>Кол-во сообщений</th>
+            <th>Действия</th>
+        </tr>
+        @foreach (var e in @Model)
+        {
+<tr>
+    <td><img src="@e.Avatar" width="50" height="50" alt="Alternate Text" /></td>
+    <td>@e.UserName</td>
+    <td>@e.Email</td>
+    <td>@e.BirthDate.ToString("d")</td>
+    <td>@e.CountMessage</td>
+    <td>
+        <a role="button" class="btn btn-secondary" asp-action="Edit" asp-controller="Account" asp-route-id="@e.Id">Редактировать</a>
+    </td>
+</tr>
+}
+
+    </table>
+
+</div>

@@ -146,7 +146,7 @@ namespace csharp_group_homework_64_ivan_kobtsev.Controllers
                     UserName = account.UserName,
                     Email = account.Email,
                     DateBirth = account.BirthDate,
-                    Password = Convert.ToString(account.PasswordHash),
+                    Password = account.PasswordHash,
                     PasswordConfirm = account.PasswordHash,
                     Avatar = account.Avatar
                 };
