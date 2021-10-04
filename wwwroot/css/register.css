@@ -1,0 +1,19 @@
+﻿
+.password {
+    position: relative;
+    max-width: 181px;
+}
+
+.password-control {
+    position: absolute;
+    top: 5px;
+    right: 6px;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: url(/icons//view-svgrepo-com.svg) 0 0 no-repeat;
+}
+
+    .password-control.view {
+        background: url(/icons/view-svgrepo-com.svg) 0 0 no-repeat;
+    }
