@@ -12,5 +12,11 @@ namespace csharp_group_homework_64_ivan_kobtsev.Models
         public string Avatar { get; set; }
         public int CountMessage { get; set; }
 
+        public List<Message> Messages { get; set; }
+        public Account()
+        {
+            Messages = new List<Message>();
+        }
+
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using csharp_group_homework_64_ivan_kobtsev.Models;
@@ -9,9 +10,10 @@ using csharp_group_homework_64_ivan_kobtsev.Models;
 namespace csharp_group_homework_64_ivan_kobtsev.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20211004131236_AddRelationBetweenAccounAndMessage")]
+    partial class AddRelationBetweenAccounAndMessage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -229,7 +231,10 @@ namespace csharp_group_homework_64_ivan_kobtsev.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("AccountId")
+                    b.Property<int>("AccountId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("AccountId1")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("DateCreate")
@@ -240,7 +245,7 @@ namespace csharp_group_homework_64_ivan_kobtsev.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
+                    b.HasIndex("AccountId1");
 
                     b.ToTable("Messages");
                 });
@@ -300,7 +305,7 @@ namespace csharp_group_homework_64_ivan_kobtsev.Migrations
                 {
                     b.HasOne("csharp_group_homework_64_ivan_kobtsev.Models.Account", "Account")
                         .WithMany("Messages")
-                        .HasForeignKey("AccountId");
+                        .HasForeignKey("AccountId1");
 
                     b.Navigation("Account");
                 });
