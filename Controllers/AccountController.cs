@@ -10,23 +10,26 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using static csharp_group_homework_64_ivan_kobtsev.service.EmailServcie;
 
 namespace csharp_group_homework_64_ivan_kobtsev.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly EmailService _Eservice;
         private readonly UserManager<Account> _userManager;
         private readonly SignInManager<Account> _signInManager;
         private IWebHostEnvironment _appEnvironment;
         private ApplicationContext _context;
 
         public AccountController(UserManager<Account> userManager, SignInManager<Account> signInManager,
-          IWebHostEnvironment appEnvironment, ApplicationContext context)
+          IWebHostEnvironment appEnvironment, ApplicationContext context, EmailService Eservice)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _appEnvironment = appEnvironment;
             _context = context;
+            _Eservice = Eservice;
         }
 
         [HttpGet]
@@ -49,7 +52,7 @@ namespace csharp_group_homework_64_ivan_kobtsev.Controllers
                     }
                 }
                 else
-                    pathImage = "/files/default.png";
+                    pathImage = "Default.png";
 
                 Account account = new Account
                 {
@@ -63,6 +66,7 @@ namespace csharp_group_homework_64_ivan_kobtsev.Controllers
                 {
                     await _userManager.AddToRoleAsync(account, "user");
                     await _signInManager.SignInAsync(account, false);
+                    _Eservice.SendEmail(model.Email, "Регистрация", "Вы успешно прошли регистрацию");
                     return RedirectToAction("Index", "Home");
                 }
                 foreach (var error in result.Errors)
@@ -140,6 +144,7 @@ namespace csharp_group_homework_64_ivan_kobtsev.Controllers
             if (id != null)
             {
                 Account account = await _context.Accounts.FirstOrDefaultAsync(b => b.Id == id);
+              
                 EditViewModel editViewModel = new EditViewModel
                 {
                     Id = account.Id,
@@ -164,7 +169,6 @@ namespace csharp_group_homework_64_ivan_kobtsev.Controllers
             if (ModelState.IsValid)
             {
                 Account account = await _context.Accounts.FirstOrDefaultAsync(e => e.Id == editViewModel.Id);
-
                 if (editViewModel != null)
                 {
                     string pathImage;
@@ -179,11 +183,32 @@ namespace csharp_group_homework_64_ivan_kobtsev.Controllers
                     else
                         pathImage = editViewModel.Avatar;
 
+                    string message = String.Empty;
+                    string pathImgChange = String.Empty;
+                    string userNameChange = String.Empty;
+                    string emailChange = String.Empty;
+                    string birthDateChange = String.Empty;
+
+                    if (account.Avatar != pathImage)
+                        pathImgChange = "Изменён аватар профиля";
+                    if (account.UserName != editViewModel.UserName)
+                        userNameChange = $"Новое имя пользователя: {editViewModel.UserName}";
+                    if (account.Email != editViewModel.Email)
+                        emailChange = $"Новая электронная почта: {editViewModel.Email}";
+                    if (account.BirthDate != editViewModel.DateBirth)
+                        birthDateChange = $"Новая дата рождения: {editViewModel.DateBirth}";
+
                     account.UserName = editViewModel.UserName;
                     account.Email = editViewModel.Email;
                     account.BirthDate = editViewModel.DateBirth;
                     account.PasswordHash = editViewModel.Password;
                     account.Avatar = pathImage;
+
+                    message = $"Изменения в профиле:\n" +
+                        $"{pathImgChange}\n{userNameChange}\n" +
+                        $"{emailChange}\n{birthDateChange}";
+
+                    _Eservice.SendEmail(editViewModel.Email, "Редактироваие профиля", message);
 
                     _context.Accounts.Update(account);
                     _context.SaveChanges();

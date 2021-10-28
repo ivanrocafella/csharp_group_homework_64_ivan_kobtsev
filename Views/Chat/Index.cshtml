@@ -5,16 +5,18 @@
 </head>
 
 <div class="container_chat">
+    @{ int i = 1;}
     @foreach (var item in Model)
     {
-            <div class="card">
+            <div id="@($"{i}_card")" class="card">
                 <div class="card-body">
                     <img id="Account_Avatar" width="100" height="100" class="card-title" src="@item.Account.Avatar" alt="Alternate Text" />
                     <h5 id="Account_Name" class="card-title">@item.Account.UserName</h5>
-                    <p id="DateTime_Create">@item.DateCreate</p>
-                    <p id="TextMessage">@item.TextOfMessage</p>
+                    <h6 id="DateTime_Create">@item.DateCreate</h6>
+                    <h6 id="TextMessage">@item.TextOfMessage</h6>
                 </div>
             </div>
+        i++;
     }
 </div>
 
@@ -29,51 +31,61 @@
         var messages = [];
         let CountMess;
         let i = 0;
+        let lastId;
 
         let htmlMessage = '<div class="card">' +
             '<div class="card-body">' +
-            '<img id="ext_Account_Avatar" width="100" height="100" class="card-title" src="" alt="Alternate Text" />' +
-            '<h5 id="ext_Account_Name" class="card-title"></h5>' +
-            '<p id="ext_DateTime_Create"></p>' +
-            '<p id="ext_TextMessage"></p>' +
+            '<img class="ext_Account_Avatar card-title" width="100" height="100" src="" alt="Alternate Text" />' +
+            '<h5 class="ext_Account_Name card-title"</h5>' +
+            '<h6 class="ext_DateTime_Create"></h6>' +
+            '<h6 class="ext_TextMessage"></h6>' +
             '</div></div>';
 
         function SendMessage(username) {
               $.post('@Url.Action("SendMessage", "Chat")',{
                       message_text: $('#message').val(),
                       user_name: username
-              }, function (response) {
-                      $('.container_chat').append(htmlMessage)
-                      $('#ext_TextMessage').text(response.accountMessageView.message_text)
-                      $('#ext_DateTime_Create').text(response.accountMessageView.date_create)
-                      $('#ext_Account_Name').text(response.accountMessageView.user_name)
-                      $('#ext_Account_Avatar').attr("src", response.accountMessageView.avatar)
-                      
-                  } , console.log(messages), console.log(messages.length),
-                
+              }, function (response) {                
+                  $('.container_chat').append(htmlMessage)
+                  messages = $('.card');
+                  if (messages == null) {
+                      htmlMessage.setAttribute('id', '1_card');
+                      $('#1_card' + ' .ext_TextMessage').text(response.accountMessageView.message_text)
+                      $('#1_card' + ' .ext_DateTime_Create').text(response.accountMessageView.date_create)
+                      $('#1_card' + ' .ext_Account_Name').text(response.accountMessageView.user_name)
+                      $('#1_card' + ' .ext_Account_Avatar').attr("src", response.accountMessageView.avatar)
+                  }
+                  lastId = messages.length;
+                  messages[messages.length - 1].setAttribute('id', '' + lastId + '_card');
+                  $('#' + lastId + '_card' + ' .ext_TextMessage').text(response.accountMessageView.message_text)
+                  $('#' + lastId + '_card' + ' .ext_DateTime_Create').text(response.accountMessageView.date_create)
+                  $('#' + lastId + '_card' + ' .ext_Account_Name').text(response.accountMessageView.user_name)
+                  $('#' + lastId + '_card' + ' .ext_Account_Avatar').attr("src", response.accountMessageView.avatar)
+                  } 
+
               )
         }
 
-       
-        
-        if (messages.length > 0) {
-            let intervalFunc = setInterval(function LoadNewMessages() {
-                for (var m in messages) {
-                    i++;
-                    $('#ext_TextMessage').text(m.message_text)
-                    $('#ext_DateTime_Create').text(m.date_create)
-                    $('#ext_Account_Name').text(m.user_name)
-                    $('#ext_Account_Avatar').attr("src", m.avatar)
-                    $('.container_chat').append(htmlMessage)
-                    console.log(i)
-                    if (i == messages.length) {
-                        clearInterval(intervalFunc);
-                        messages = [];
-                    }
-                }
-            }, 5000);
-        }
-     
+
+
+       if (messages.length > 0) {
+           let intervalFunc = setInterval(function LoadNewMessages() {
+               for (var m in messages) {
+                   i++;
+                   $('#ext_TextMessage').text(m.message_text)
+                   $('#ext_DateTime_Create').text(m.date_create)
+                   $('#ext_Account_Name').text(m.user_name)
+                   $('#ext_Account_Avatar').attr("src", m.avatar)
+                   $('.container_chat').append(htmlMessage)
+                   console.log(i)
+                   if (i == messages.length) {
+                       clearInterval(intervalFunc);
+                       messages = [];
+                   }
+               }
+           }, 5000);
+       }
+
 
     </script>
 

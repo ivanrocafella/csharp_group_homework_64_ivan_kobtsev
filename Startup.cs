@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static csharp_group_homework_64_ivan_kobtsev.service.EmailServcie;
 
 namespace csharp_group_homework_64_ivan_kobtsev
 {
@@ -40,6 +41,7 @@ namespace csharp_group_homework_64_ivan_kobtsev
                     options.Password.RequireUppercase = true;
                     options.Password.RequireDigit = true;
                 }).AddEntityFrameworkStores<ApplicationContext>();
+            services.AddTransient<EmailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
