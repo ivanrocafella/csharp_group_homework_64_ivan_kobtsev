@@ -17,16 +17,23 @@
         </tr>
         @foreach (var e in @Model)
         {
-<tr>
-    <td><img src="@e.Avatar" width="50" height="50" alt="Alternate Text" /></td>
-    <td>@e.UserName</td>
-    <td>@e.Email</td>
-    <td>@e.BirthDate.ToString("d")</td>
-    <td>@e.CountMessage</td>
-    <td>
-        <a role="button" class="btn btn-secondary" asp-action="Edit" asp-controller="Account" asp-route-id="@e.Id">Редактировать</a>
-    </td>
-</tr>
+    <tr>
+        <td><img src="@e.Avatar" width="50" height="50" alt="Alternate Text" /></td>
+        <td>@e.UserName</td>
+        <td>@e.Email</td>
+        <td>@e.BirthDate.ToString("d")</td>
+        <td>@e.CountMessage</td>
+        @if (User.IsInRole("admin"))
+        {
+            <td>
+                <a role="button" class="btn btn-secondary" asp-action="Edit" asp-controller="Account" asp-route-id="@e.Id">Редактировать</a>
+            </td>
+        }
+            <td>
+                <a class="btn btn-primary" asp-controller="Account" asp-action="SendUser"
+                   asp-route-id="@e.Id" role="button">Отправить инфо о пользователе</a>
+            </td>
+    </tr>
 }
 
     </table>

@@ -1,4 +1,5 @@
 ﻿using csharp_group_homework_64_ivan_kobtsev.Models;
+using csharp_group_homework_64_ivan_kobtsev.services;
 using csharp_group_homework_64_ivan_kobtsev.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,7 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using static csharp_group_homework_64_ivan_kobtsev.service.EmailServcie;
+
 
 namespace csharp_group_homework_64_ivan_kobtsev.Controllers
 {
@@ -219,6 +220,25 @@ namespace csharp_group_homework_64_ivan_kobtsev.Controllers
             {
                 return RedirectToAction("Edit");
             }
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> SendUser(string id)
+        {
+            Account CurAccount = await _userManager.GetUserAsync(HttpContext.User);
+            if (id != null)
+            {
+                Account account = await _context.Accounts
+               .FirstOrDefaultAsync(e => e.Id == id);
+                string message = $"Данные о пользователе:\n" +
+                       $"Логин: {account.UserName}\n Электронная почта: {account.Email}\n" +
+                       $"Дата рождения: {account.BirthDate.ToString("d")}\n Кол-во сообщений: {account.CountMessage}";
+                _Eservice.SendEmail(CurAccount.Email, "Запрос данных о пользователе", message);
+                return RedirectToAction("Accounts", "Home");
+            }
+            return NotFound();
+           
         }
     }
 }

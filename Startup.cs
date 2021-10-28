@@ -1,4 +1,5 @@
 using csharp_group_homework_64_ivan_kobtsev.Models;
+using csharp_group_homework_64_ivan_kobtsev.services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -14,7 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static csharp_group_homework_64_ivan_kobtsev.service.EmailServcie;
+
 
 namespace csharp_group_homework_64_ivan_kobtsev
 {
