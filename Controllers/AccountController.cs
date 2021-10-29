@@ -67,7 +67,8 @@ namespace csharp_group_homework_64_ivan_kobtsev.Controllers
                 {
                     await _userManager.AddToRoleAsync(account, "user");
                     await _signInManager.SignInAsync(account, false);
-                    _Eservice.SendEmail(model.Email, "Регистрация", "Вы успешно прошли регистрацию");
+                    _Eservice.SendEmail(model.Email, "Регистрация", $"Вы успешно прошли регистрацию" +
+                        $"Ссылка на профиль: <a href=\"https://localhost:44302/Account/PrivateCabinet?name={account.UserName}\">Ссылка на профиль</a>");
                     return RedirectToAction("Index", "Home");
                 }
                 foreach (var error in result.Errors)
